@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ThrivnMe — Pricing</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@sankofa/browser/dist/sankofa.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@sankofa/replay-rrweb/dist/sankofa-replay.min.js"></script>
+</head>
+<body>
+  <nav id="main-nav">
+    <a href="/" class="logo">ThrivnMe</a>
+    <div class="nav-links">
+      <a href="/features.html">Features</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/docs.html">Docs</a>
+      <a href="/login.html" class="btn btn-outline">Log In</a>
+      <a href="/signup.html" class="btn btn-primary">Start Free</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <h1>Simple, transparent pricing</h1>
+    <p>Start free. Upgrade when your app grows.</p>
+  </section>
+
+  <section class="features">
+    <div class="feature-grid">
+      <div class="feature-card" data-plan="hobby">
+        <h3>Hobby</h3>
+        <p style="font-size:2rem;font-weight:800;color:#fff;margin:1rem 0;">Free</p>
+        <p>100K events/mo, 1K replays, 30 day retention.</p>
+      </div>
+      <div class="feature-card" data-plan="pro" style="border-color:#6366f1;">
+        <h3>Pro</h3>
+        <p style="font-size:2rem;font-weight:800;color:#fff;margin:1rem 0;">$29<span style="font-size:0.875rem;color:#a1a1aa;">/mo</span></p>
+        <p>1M events/mo, 5K replays, 90 day retention.</p>
+      </div>
+      <div class="feature-card" data-plan="growth">
+        <h3>Growth</h3>
+        <p style="font-size:2rem;font-weight:800;color:#fff;margin:1rem 0;">$99<span style="font-size:0.875rem;color:#a1a1aa;">/mo</span></p>
+        <p>10M events/mo, 20K replays, 1 year retention.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p class="copyright">&copy; 2026 ThrivnMe. All rights reserved.</p>
+  </footer>
+
+  <script src="js/analytics.js"></script>
+  <script>
+    // Track pricing page interactions
+    document.querySelectorAll('.feature-card[data-plan]').forEach(card => {
+      card.addEventListener('click', () => {
+        Sankofa.track('pricing_plan_clicked', {
+          plan: card.getAttribute('data-plan'),
+        });
+      });
+    });
+  </script>
+</body>
+</html>

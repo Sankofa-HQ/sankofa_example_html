@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ThrivnMe — Landing</title>
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Sankofa Analytics + Session Replay (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/@sankofa/browser/dist/sankofa.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@sankofa/replay-rrweb/dist/sankofa-replay.min.js"></script>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav id="main-nav">
+    <a href="/" class="logo">ThrivnMe</a>
+    <div class="nav-links">
+      <a href="/features.html">Features</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/docs.html">Docs</a>
+      <a href="/login.html" class="btn btn-outline">Log In</a>
+      <a href="/signup.html" class="btn btn-primary">Start Free</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Build better mobile apps, faster</h1>
+    <p>Analytics, OTA updates, and crash reporting — all in one SDK.</p>
+    <div class="hero-cta">
+      <a href="/signup.html" class="btn btn-primary btn-lg" id="hero-cta">Get Started Free</a>
+      <a href="/docs.html" class="btn btn-outline btn-lg">Read the Docs</a>
+    </div>
+  </section>
+
+  <!-- Features Grid -->
+  <section class="features" id="features">
+    <h2>Everything you need</h2>
+    <div class="feature-grid">
+      <div class="feature-card" data-feature="analytics">
+        <h3>Analytics</h3>
+        <p>Heatmaps, funnels, session replays. Understand how users actually use your app.</p>
+      </div>
+      <div class="feature-card" data-feature="deploy">
+        <h3>Deploy</h3>
+        <p>Push OTA updates instantly. Phased rollouts, auto-rollback, kill switch.</p>
+      </div>
+      <div class="feature-card" data-feature="catch">
+        <h3>Catch</h3>
+        <p>Crash grouping, stack traces, breadcrumbs. Know about bugs before your users report them.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials">
+    <h2>Loved by teams worldwide</h2>
+    <div class="testimonial-grid">
+      <blockquote>
+        <p>"Sankofa Deploy saved us during a critical launch. We pushed a fix in 30 seconds."</p>
+        <cite>— Engineering Lead, Fintech Startup</cite>
+      </blockquote>
+      <blockquote>
+        <p>"Session replays changed how we debug. We see exactly what the user saw."</p>
+        <cite>— Product Manager, E-commerce App</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- Pricing CTA -->
+  <section class="pricing-cta">
+    <h2>Start free, scale when you're ready</h2>
+    <p>100K events/month free. No credit card required.</p>
+    <a href="/pricing.html" class="btn btn-primary btn-lg" id="pricing-cta">View Pricing</a>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <h4>Product</h4>
+        <a href="/features.html">Features</a>
+        <a href="/pricing.html">Pricing</a>
+        <a href="/docs.html">Documentation</a>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <a href="/about.html">About</a>
+        <a href="/blog.html">Blog</a>
+        <a href="/careers.html">Careers</a>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <a href="/privacy.html">Privacy</a>
+        <a href="/terms.html">Terms</a>
+      </div>
+    </div>
+    <p class="copyright">&copy; 2026 ThrivnMe. All rights reserved.</p>
+  </footer>
+
+  <!-- App Scripts -->
+  <script src="js/analytics.js"></script>
+  <script src="js/interactions.js"></script>
+</body>
+</html>

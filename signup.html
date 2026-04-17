@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ThrivnMe — Sign Up</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@sankofa/browser/dist/sankofa.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@sankofa/replay-rrweb/dist/sankofa-replay.min.js"></script>
+</head>
+<body>
+  <nav id="main-nav">
+    <a href="/" class="logo">ThrivnMe</a>
+    <div class="nav-links">
+      <a href="/login.html" class="btn btn-outline">Log In</a>
+    </div>
+  </nav>
+
+  <section class="hero" style="max-width:440px;">
+    <h1 style="font-size:2rem;">Create your account</h1>
+    <p>Start building better apps in minutes.</p>
+
+    <form id="signup-form" style="text-align:left;margin-top:2rem;">
+      <label style="display:block;margin-bottom:1rem;">
+        <span style="font-size:0.8rem;font-weight:600;color:#a1a1aa;display:block;margin-bottom:0.25rem;">Full Name</span>
+        <input type="text" name="name" required
+          style="width:100%;padding:0.6rem 0.75rem;background:#18181b;border:1px solid #27272a;border-radius:0.5rem;color:#fff;font-size:0.9rem;" />
+      </label>
+      <label style="display:block;margin-bottom:1rem;">
+        <span style="font-size:0.8rem;font-weight:600;color:#a1a1aa;display:block;margin-bottom:0.25rem;">Email</span>
+        <input type="email" name="email" required
+          style="width:100%;padding:0.6rem 0.75rem;background:#18181b;border:1px solid #27272a;border-radius:0.5rem;color:#fff;font-size:0.9rem;" />
+      </label>
+      <label style="display:block;margin-bottom:1.5rem;">
+        <span style="font-size:0.8rem;font-weight:600;color:#a1a1aa;display:block;margin-bottom:0.25rem;">Password</span>
+        <input type="password" name="password" required minlength="8"
+          style="width:100%;padding:0.6rem 0.75rem;background:#18181b;border:1px solid #27272a;border-radius:0.5rem;color:#fff;font-size:0.9rem;" />
+      </label>
+      <button type="submit" class="btn btn-primary" style="width:100%;padding:0.75rem;">Create Account</button>
+    </form>
+  </section>
+
+  <footer style="margin-top:4rem;">
+    <p class="copyright">&copy; 2026 ThrivnMe. All rights reserved.</p>
+  </footer>
+
+  <script src="js/analytics.js"></script>
+  <script>
+    document.getElementById('signup-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const name = form.name.value;
+      const email = form.email.value;
+
+      // Track signup
+      Sankofa.track('signup_completed', { method: 'email' });
+
+      // Identify the user
+      Sankofa.identify(email);
+      Sankofa.setPerson({ name, email });
+
+      alert('Account created! (demo)');
+    });
+  </script>
+</body>
+</html>
