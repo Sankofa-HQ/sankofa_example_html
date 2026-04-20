@@ -9,6 +9,11 @@
   <!-- Sankofa Analytics + Session Replay (CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/@sankofa/browser/dist/sankofa.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@sankofa/replay-rrweb/dist/sankofa-replay.min.js"></script>
+  <!-- Sankofa Switch + Config (vendored locally — swap for CDN once published) -->
+  <script src="js/vendor/sankofa-switch.min.js"></script>
+  <script src="js/vendor/sankofa-config.min.js"></script>
+  <!-- Canonical demo keys + defaults -->
+  <script src="js/sankofa-demo.js"></script>
 </head>
 <body>
   <!-- Navigation -->
@@ -74,6 +79,9 @@
     <a href="/pricing.html" class="btn btn-primary btn-lg" id="pricing-cta">View Pricing</a>
   </section>
 
+  <!-- Sankofa Flags & Config Lab — rendered by js/flags-lab.js. -->
+  <section id="sankofa-lab" style="max-width:1100px;margin:32px auto;padding:28px;background:#f8fafc;border-radius:16px"></section>
+
   <!-- Footer -->
   <footer>
     <div class="footer-grid">
@@ -100,6 +108,7 @@
 
   <!-- App Scripts -->
   <script src="js/analytics.js"></script>
+  <script src="js/flags-lab.js"></script>
   <script src="js/interactions.js"></script>
 </body>
 </html>

@@ -8,11 +8,18 @@
 
 // ── Initialize ────────────────────────────────────────────────────────────────
 
+// SankofaDemo (from js/sankofa-demo.js) holds canonical flag/config
+// keys + defaults so the HTML example renders offline if the server
+// never responds. The IIFE bundles under js/vendor/ expose
+// `SankofaSwitch` and `SankofaConfig` globals carrying `switchPlugin`
+// and `configPlugin` respectively.
 Sankofa.init({
   apiKey: 'sk_test_b25f965d194d55bd071fb23921401e7c',
   endpoint: 'http://localhost:8080',
   debug: true,
   plugins: [
+    SankofaSwitch.switchPlugin({ defaults: SankofaDemo.FLAG_DEFAULTS }),
+    SankofaConfig.configPlugin({ defaults: SankofaDemo.CONFIG_DEFAULTS }),
     SankofaReplay.rrwebReplayPlugin({
       maskAllInputs: true,
     }),
