@@ -13,17 +13,45 @@
 // never responds. The IIFE bundles under js/vendor/ expose
 // `SankofaSwitch` and `SankofaConfig` globals carrying `switchPlugin`
 // and `configPlugin` respectively.
+//
+// We build the plugins array defensively — each plugin is pushed only
+// when its IIFE global is actually present. That way a failed CDN
+// fetch for one plugin (Replay, typically) doesn't torpedo the whole
+// init and silently break analytics / catch / switch / config.
+const plugins = [];
+if (typeof SankofaSwitch !== 'undefined' && SankofaSwitch.switchPlugin) {
+  plugins.push(SankofaSwitch.switchPlugin({ defaults: SankofaDemo.FLAG_DEFAULTS }));
+} else {
+  console.warn('[Sankofa demo] SankofaSwitch global missing — Switch plugin skipped.');
+}
+if (typeof SankofaConfig !== 'undefined' && SankofaConfig.configPlugin) {
+  plugins.push(SankofaConfig.configPlugin({ defaults: SankofaDemo.CONFIG_DEFAULTS }));
+} else {
+  console.warn('[Sankofa demo] SankofaConfig global missing — Config plugin skipped.');
+}
+if (typeof SankofaReplay !== 'undefined' && SankofaReplay.rrwebReplayPlugin) {
+  plugins.push(SankofaReplay.rrwebReplayPlugin({ maskAllInputs: true }));
+} else {
+  console.warn('[Sankofa demo] SankofaReplay global missing — Replay plugin skipped.');
+}
+if (typeof SankofaCatch !== 'undefined' && SankofaCatch.catchPlugin) {
+  plugins.push(
+    SankofaCatch.catchPlugin({
+      environment: 'test',
+      captureUnhandled: true,
+      captureRejections: true,
+      release: 'thrivnme-html@0.1.0',
+    }),
+  );
+} else {
+  console.warn('[Sankofa demo] SankofaCatch global missing — Catch plugin skipped. Make sure js/vendor/sankofa-catch.min.js is loaded.');
+}
+
 Sankofa.init({
   apiKey: 'sk_test_b25f965d194d55bd071fb23921401e7c',
   endpoint: 'http://localhost:8080',
   debug: true,
-  plugins: [
-    SankofaSwitch.switchPlugin({ defaults: SankofaDemo.FLAG_DEFAULTS }),
-    SankofaConfig.configPlugin({ defaults: SankofaDemo.CONFIG_DEFAULTS }),
-    SankofaReplay.rrwebReplayPlugin({
-      maskAllInputs: true,
-    }),
-  ],
+  plugins: plugins,
 });
 
 // ── Page View ─────────────────────────────────────────────────────────────────

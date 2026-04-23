@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ThrivnMe — Sankofa Catch crash gallery</title>
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Sankofa Analytics + Session Replay (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/@sankofa/browser/dist/sankofa.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@sankofa/replay-rrweb/dist/sankofa-replay.min.js"></script>
+  <!-- Sankofa Switch + Config + Catch (vendored IIFE bundles) -->
+  <script src="js/vendor/sankofa-switch.min.js"></script>
+  <script src="js/vendor/sankofa-config.min.js"></script>
+  <script src="js/vendor/sankofa-catch.min.js"></script>
+  <!-- Canonical demo keys + defaults -->
+  <script src="js/sankofa-demo.js"></script>
+
+  <style>
+    main.crashes-shell {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+    .crashes-intro { color: #6b7280; font-size: 15px; line-height: 1.5; margin-bottom: 24px; }
+    .crashes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 600px) { .crashes-grid { grid-template-columns: 1fr; } }
+    .crash-btn {
+      appearance: none;
+      background: #fff5f5;
+      color: #9f1239;
+      border: 1px solid #fecaca;
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s ease;
+    }
+    .crash-btn:hover { border-color: #e11d48; background: #ffe4e6; color: #881337; }
+    .crash-btn small {
+      display: block;
+      font-weight: 400;
+      color: #9f1239a0;
+      margin-top: 4px;
+      font-size: 12px;
+      font-family: ui-monospace, monospace;
+    }
+    .crash-status {
+      margin-top: 20px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      font-size: 12px;
+      font-family: ui-monospace, monospace;
+      color: #4b5563;
+      min-height: 36px;
+    }
+    .crashes-env {
+      margin-top: 16px;
+      font-size: 12px;
+      color: #6b7280;
+    }
+    .crashes-env code { background: #f3f4f6; padding: 2px 6px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <nav id="main-nav">
+    <a href="/" class="logo">ThrivnMe</a>
+    <div class="nav-links">
+      <a href="/features.html">Features</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/crashes.html">Catch demo</a>
+      <a href="/signup.html" class="btn btn-primary">Start Free</a>
+    </div>
+  </nav>
+
+  <main class="crashes-shell">
+    <h1 style="margin-top: 0;">🦋 Sankofa Catch — crash gallery</h1>
+    <p class="crashes-intro">
+      Each button triggers a distinct realistic frontend crash class. Every event flows to
+      <code>/api/catch/events</code> and shows up on the Sankofa dashboard under <strong>Catch → Issues</strong>
+      grouped by fingerprint, with the breadcrumb trail + live flag snapshot attached.
+    </p>
+
+    <div class="crashes-grid" id="crash-grid"></div>
+
+    <div class="crash-status" id="crash-status">Waiting for a crash…</div>
+
+    <p class="crashes-env">
+      Endpoint: <code id="env-endpoint">—</code> · API key prefix:
+      <code id="env-apikey">—</code> · Change in <code>js/analytics.js</code>.
+    </p>
+  </main>
+
+  <!-- Init + page-view tracking shared across pages -->
+  <script src="js/analytics.js"></script>
+  <!-- Crash gallery page script -->
+  <script src="js/crashes.js"></script>
+</body>
+</html>
