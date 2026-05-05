@@ -46,6 +46,15 @@ if (typeof SankofaCatch !== 'undefined' && SankofaCatch.catchPlugin) {
 } else {
   console.warn('[Sankofa demo] SankofaCatch global missing — Catch plugin skipped. Make sure js/vendor/sankofa-catch.min.js is loaded.');
 }
+if (typeof SankofaPulse !== 'undefined' && SankofaPulse.pulsePlugin) {
+  // The plugin owns the modal renderer, the targeting evaluator, and
+  // the partial-state queue — host code only needs to call `show()`
+  // (see js/pulse-lab.js). `respondent` is optional here; the plugin
+  // falls back to Sankofa.distinctId() / anonymousId() if absent.
+  plugins.push(SankofaPulse.pulsePlugin({}));
+} else {
+  console.warn('[Sankofa demo] SankofaPulse global missing — Pulse plugin skipped. Make sure js/vendor/sankofa-pulse.min.js is loaded.');
+}
 
 Sankofa.init({
   apiKey: 'sk_test_b25f965d194d55bd071fb23921401e7c',

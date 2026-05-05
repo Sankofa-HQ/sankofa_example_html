@@ -67,6 +67,24 @@ window.SankofaDemo = (function () {
     [CONFIG.THEME_COLORS]:               'JSON {primary, accent} — theme tokens.',
   };
 
+  // Canonical Pulse demo survey IDs — match the `seed_pulse` server
+  // command and every other example app.
+  const SURVEYS = {
+    NPS_AFTER_CHECKOUT: 'psv_demo_nps_checkout',
+    CSAT_SUPPORT:       'psv_demo_csat_support',
+    PRODUCT_RESEARCH:   'psv_demo_product_research',
+  };
+  const SURVEY_TITLES = {
+    [SURVEYS.NPS_AFTER_CHECKOUT]: 'Post-checkout NPS',
+    [SURVEYS.CSAT_SUPPORT]:       'Support CSAT',
+    [SURVEYS.PRODUCT_RESEARCH]:   'Pro product research',
+  };
+  const SURVEY_DESCRIPTIONS = {
+    [SURVEYS.NPS_AFTER_CHECKOUT]: '11-point NPS with branching follow-up. Sampled at 50%.',
+    [SURVEYS.CSAT_SUPPORT]:       '5-point CSAT after a closed support ticket.',
+    [SURVEYS.PRODUCT_RESEARCH]:   'Multi-question research panel, gated to plan = pro.',
+  };
+
   return {
     FLAGS,
     CONFIG,
@@ -74,5 +92,8 @@ window.SankofaDemo = (function () {
     CONFIG_DEFAULTS,
     FLAG_DESCRIPTIONS,
     CONFIG_DESCRIPTIONS,
+    SURVEYS,
+    SURVEY_TITLES,
+    SURVEY_DESCRIPTIONS,
   };
 })();
