@@ -20,19 +20,31 @@ Also make sure the Sankofa dashboard backend is running at the `endpoint` config
 
 Each button card triggers one of these crash classes:
 
-| Button | Error class |
-|---|---|
-| TypeError: null property access | `TypeError` — null property read |
-| ReferenceError: undeclared identifier | `ReferenceError` — typo / missing import |
-| Unhandled promise rejection | `Error` via `unhandledrejection` |
-| fetch() to invalid host | `TypeError` (network) + `captureException` with context |
-| SyntaxError: JSON.parse on HTML | `SyntaxError` — upstream 502 HTML |
-| Null DOM element | `TypeError` — `querySelector` returned null |
-| RangeError: maximum call stack | `RangeError` — infinite recursion |
-| Custom error (handled) | `CheckoutValidationError` + fingerprint + tags |
-| Error inside setTimeout | Uncaught throw from timer callback |
-| captureMessage (no exception) | Warning-level signal, no error object |
-| Manual breadcrumb trail | 3 breadcrumbs pre-seeded → handled throw |
+| Button | Phase | Error class / behaviour |
+|---|---|---|
+| TypeError: null property access | — | `TypeError` — null property read |
+| ReferenceError: undeclared identifier | — | `ReferenceError` — typo / missing import |
+| Unhandled promise rejection | — | `Error` via `unhandledrejection` |
+| fetch() to invalid host | — | `TypeError` (network) + `captureException` with context |
+| SyntaxError: JSON.parse on HTML | — | `SyntaxError` — upstream 502 HTML |
+| Null DOM element | — | `TypeError` — `querySelector` returned null |
+| RangeError: maximum call stack | — | `RangeError` — infinite recursion |
+| Custom error (handled) | — | `CheckoutValidationError` + fingerprint + tags |
+| Error inside setTimeout | — | Uncaught throw from timer callback |
+| captureMessage (no exception) | — | Warning-level signal, no error object |
+| Manual breadcrumb trail | — | 3 breadcrumbs pre-seeded → handled throw |
+| **Sankofa.log() breadcrumb** | A | Crashlytics-style `log()` lines ride on a manual `captureException` |
+| **withScope — temporary overlay** | B | Tags + level + extras attached to ONE capture only; global scope is untouched |
+| **withScope — nested scopes** | B | Inner scope inherits + extends the outer at capture time |
+| **beforeSend — see analytics.js** | B | Fires events the hook should drop (`"[noise]"`) or scrub (`user_email`) |
+
+The Phase A static (`Sankofa.log()`) and Phase B helpers (`Sankofa.withScope`, `beforeSend`) live on the **browser** IIFE (`js/vendor/sankofa.min.js`) — if those buttons report "withScope not available in this bundle", rebuild `@sankofa/browser`:
+
+```bash
+cd sdks/sankofa_sdk_web/packages/browser
+npm run bundle
+cp dist/sankofa.min.js ../../../example/sankofa_example_html/js/vendor/
+```
 
 ## Troubleshooting
 

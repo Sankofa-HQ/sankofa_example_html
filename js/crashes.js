@@ -215,6 +215,131 @@
         }
       },
     },
+
+    // ── Phase A — Sankofa.log() Crashlytics-style breadcrumb ──
+    //
+    // log() pushes a free-text crumb onto the ring buffer that rides
+    // on the next captured exception. Doesn't bill on its own.
+    // Reached via the global `Sankofa.log(...)` static when the
+    // browser package is loaded; falls back to a manual breadcrumb
+    // call if `Sankofa.log` isn't available in the vendored bundle.
+    {
+      id: 'phase-a-log',
+      title: 'Phase A — Sankofa.log() breadcrumb',
+      detail: 'log() pushes a crumb; the next captureException attaches it',
+      run: function () {
+        if (typeof Sankofa !== 'undefined' && typeof Sankofa.log === 'function') {
+          Sankofa.log('user opened payment flow', 'navigation');
+          Sankofa.log('cart total: 49.00 USD', 'commerce');
+          Sankofa.log('tapped pay button', 'user-action');
+        } else if (catcher) {
+          catcher.addBreadcrumb({ type: 'log', category: 'navigation', message: 'user opened payment flow', level: 'info' });
+          catcher.addBreadcrumb({ type: 'log', category: 'commerce', message: 'cart total: 49.00 USD', level: 'info' });
+          catcher.addBreadcrumb({ type: 'log', category: 'user-action', message: 'tapped pay button', level: 'info' });
+        }
+        try {
+          throw new Error('payment gateway returned no token');
+        } catch (err) {
+          if (typeof Sankofa !== 'undefined' && typeof Sankofa.captureException === 'function') {
+            Sankofa.captureException(err);
+          } else if (catcher) {
+            catcher.captureException(err);
+          }
+        }
+      },
+    },
+
+    // ── Phase B — withScope (single + nested) ──
+    //
+    // Sentry-style temporary scope overlay. Tags / extras / level set
+    // inside the closure layer onto captures made inside the closure;
+    // the global scope is untouched. Stack-scoped — nested withScope
+    // calls compose; async captures deferred past the closure return
+    // do NOT see the scope.
+    {
+      id: 'phase-b-with-scope',
+      title: 'Phase B — withScope (temporary overlay)',
+      detail: 'tags + level + extras attached to ONE capture only',
+      run: function () {
+        if (typeof Sankofa === 'undefined' || typeof Sankofa.withScope !== 'function') {
+          // Vendored bundle predates Phase B — rebuild + redeploy.
+          if (catcher) catcher.captureMessage('withScope not available in this bundle — rebuild @sankofa/browser');
+          return;
+        }
+        Sankofa.withScope(function (scope) {
+          scope.setTag('checkout_step', 'payment');
+          scope.setTag('payment_method', 'stripe');
+          scope.setExtra('cart_id', 'cart_8x92Lq');
+          scope.setExtra('cart_value_cents', 4900);
+          scope.setLevel('warning');
+          scope.setFingerprint(['checkout', 'payment', 'manual']);
+          try {
+            throw new Error('payment gateway timeout — retried 3x');
+          } catch (err) {
+            // Only this capture carries the scope's extras + level.
+            Sankofa.captureException(err);
+          }
+        });
+        // Subsequent captures lose the scope.
+        Sankofa.captureMessage('post-scope event — no checkout_step tag');
+      },
+    },
+    {
+      id: 'phase-b-with-scope-nested',
+      title: 'Phase B — withScope (nested scopes)',
+      detail: 'inner scope inherits + extends the outer at capture time',
+      run: function () {
+        if (typeof Sankofa === 'undefined' || typeof Sankofa.withScope !== 'function') {
+          if (catcher) catcher.captureMessage('withScope not available in this bundle — rebuild @sankofa/browser');
+          return;
+        }
+        Sankofa.withScope(function (outer) {
+          outer.setTag('feature', 'billing');
+          outer.setExtra('checkout_session', 'sess_12345');
+          Sankofa.withScope(function (inner) {
+            inner.setTag('substep', 'card-validation');
+            inner.setExtra('attempt', 2);
+            try {
+              throw new TypeError('invalid card number checksum');
+            } catch (err) {
+              // Carries BOTH feature=billing (outer) AND
+              // substep=card-validation (inner).
+              Sankofa.captureException(err);
+            }
+          });
+          // After inner pops, only outer's tags apply.
+          Sankofa.captureMessage('still in outer scope (no substep)');
+        });
+      },
+    },
+
+    // ── Phase B — beforeSend (see analytics.js) ──
+    //
+    // The beforeSend hook is configured at init time in analytics.js.
+    // It drops events whose message contains "[noise]" and scrubs
+    // `user_email` from extras. This button fires events that
+    // exercise both branches.
+    {
+      id: 'phase-b-before-send',
+      title: 'Phase B — beforeSend (see analytics.js)',
+      detail: 'fires events the hook should drop or scrub',
+      run: function () {
+        const captureMsg = (typeof Sankofa !== 'undefined' && typeof Sankofa.captureMessage === 'function')
+          ? Sankofa.captureMessage
+          : (catcher ? catcher.captureMessage.bind(catcher) : null);
+        if (!captureMsg) return;
+        // 1. "[noise]" → beforeSend returns null → dropped.
+        captureMsg('[noise] framework warning — drop me');
+        // 2. PII scrubbed — beforeSend rewrites user_email before send.
+        captureMsg('checkout failure — beforeSend should scrub user_email', {
+          level: 'info',
+          extra: {
+            user_email: 'ada@example.com',
+            note: 'beforeSend should redact user_email',
+          },
+        });
+      },
+    },
   ];
 
   // ── UI wiring ──

@@ -41,6 +41,21 @@ if (typeof SankofaCatch !== 'undefined' && SankofaCatch.catchPlugin) {
       captureUnhandled: true,
       captureRejections: true,
       release: 'thrivnme-html@0.1.0',
+      // 🚀 Phase B — beforeSend hook. Runs AFTER an event is composed
+      // but BEFORE the transport sends. Return null to drop entirely;
+      // return the event (possibly modified) to ship. Throws swallowed.
+      //   1. Drop events whose message contains "[noise]" (framework
+      //      warnings you can't fix).
+      //   2. Scrub `user_email` from `extra` so PII doesn't leak to
+      //      the dashboard.
+      beforeSend: function (event) {
+        if (event.message && event.message.indexOf('[noise]') >= 0) return null;
+        if (event.extra && 'user_email' in event.extra) {
+          var scrubbed = Object.assign({}, event.extra, { user_email: '[redacted]' });
+          return Object.assign({}, event, { extra: scrubbed });
+        }
+        return event;
+      },
     }),
   );
 } else {
