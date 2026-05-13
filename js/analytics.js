@@ -71,17 +71,33 @@ if (typeof SankofaPulse !== 'undefined' && SankofaPulse.pulsePlugin) {
   console.warn('[Sankofa demo] SankofaPulse global missing — Pulse plugin skipped. Make sure js/vendor/sankofa-pulse.min.js is loaded.');
 }
 
-Sankofa.init({
-  apiKey: 'sk_test_b25f965d194d55bd071fb23921401e7c',
-  endpoint: 'http://localhost:8080',
-  debug: true,
-  plugins: plugins,
-});
+// pageName is referenced by every event tracker on the page, so we
+// compute it unconditionally — even when the user hasn't connected
+// yet — so the rest of this file's listener bindings stay valid.
+var pageName = document.title.split('—')[0]?.trim() || document.title;
 
-// ── Page View ─────────────────────────────────────────────────────────────────
+// Resolve creds from the connect helper (js/sankofa-connect.js).
+// When the user hasn't connected yet, the helper renders an overlay
+// form and we skip init — the page reload after submit re-runs this
+// file with the saved creds. This mirrors the iOS / Android / RN /
+// Flutter / web-app examples: connect once, persist, and a
+// "Disconnect" pill (also injected by the helper) returns to the
+// form.
+var sankofaConn = window.SankofaExampleConnection;
+if (!sankofaConn || !sankofaConn.isConnected()) {
+  if (sankofaConn && sankofaConn.showConnect) sankofaConn.showConnect();
+  console.info('[Sankofa demo] Waiting for API key — Sankofa.init() skipped until the user connects.');
+} else {
+  Sankofa.init({
+    apiKey: sankofaConn.apiKey(),
+    endpoint: sankofaConn.endpoint(),
+    debug: true,
+    plugins: plugins,
+  });
 
-const pageName = document.title.split('—')[0]?.trim() || document.title;
-Sankofa.screen(pageName);
+  // ── Page View ─────────────────────────────────────────────────────────────
+  Sankofa.screen(pageName);
+}
 
 // ── CTA Tracking ──────────────────────────────────────────────────────────────
 

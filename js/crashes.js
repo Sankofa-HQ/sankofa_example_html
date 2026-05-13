@@ -349,8 +349,18 @@
   const endpointEl = document.getElementById('env-endpoint');
   const apiKeyEl = document.getElementById('env-apikey');
 
-  if (endpointEl) endpointEl.textContent = 'http://localhost:8080';
-  if (apiKeyEl) apiKeyEl.textContent = 'sk_test_b25f965d…';
+  // Pull live values from the connect helper so the env line matches
+  // whatever credentials the user actually entered. Falls back to the
+  // hosted-cloud defaults when the helper is missing (e.g. someone
+  // loaded crashes.html standalone).
+  var conn = window.SankofaExampleConnection;
+  if (endpointEl) {
+    endpointEl.textContent = (conn && conn.endpoint && conn.endpoint()) || 'http://localhost:8080';
+  }
+  if (apiKeyEl) {
+    var k = (conn && conn.apiKey && conn.apiKey()) || '';
+    apiKeyEl.textContent = k ? k.slice(0, 12) + '…' : 'not connected';
+  }
 
   if (!grid) return;
 
