@@ -6,13 +6,13 @@
   <title>ThrivnMe — Landing</title>
   <link rel="stylesheet" href="css/style.css" />
 
-  <!-- Sankofa Analytics + Session Replay (CDN) -->
-  <script src="https://cdn.jsdelivr.net/npm/@sankofa/browser/dist/sankofa.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@sankofa/replay-rrweb/dist/sankofa-replay.min.js"></script>
-  <!-- Sankofa Switch + Config + Pulse (vendored locally — swap for CDN once published) -->
-  <script src="js/vendor/sankofa-switch.min.js"></script>
-  <script src="js/vendor/sankofa-config.min.js"></script>
-  <script src="js/vendor/sankofa-pulse.min.js"></script>
+  <!-- Sankofa SDK — all modules from the jsDelivr CDN, pinned to @0.2.0. -->
+  <!-- browser must load first; the other modules attach to its global. -->
+  <script src="https://cdn.jsdelivr.net/npm/@sankofa/browser@0.2.0/dist/sankofa.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@sankofa/replay-rrweb@0.2.1/dist/sankofa-replay.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@sankofa/switch@0.2.0/dist/sankofa-switch.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@sankofa/config@0.2.0/dist/sankofa-config.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@sankofa/pulse@0.2.0/dist/sankofa-pulse.min.js"></script>
   <!-- Canonical demo keys + defaults -->
   <script src="js/sankofa-demo.js"></script>
 </head>

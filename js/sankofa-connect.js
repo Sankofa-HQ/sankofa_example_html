@@ -20,7 +20,7 @@
 (function () {
   const STORAGE_API_KEY = 'sankofa.example.apiKey';
   const STORAGE_ENDPOINT = 'sankofa.example.endpoint';
-  const DEFAULT_ENDPOINT = 'http://localhost:8080';
+  const DEFAULT_ENDPOINT = 'https://api.sankofa.dev';
 
   function readKey() {
     try {
@@ -73,7 +73,7 @@
       '<input id="sankofa-connect-key" type="password" autocomplete="off" spellcheck="false" placeholder="sk_test_…" style="width:100%;box-sizing:border-box;background:#16162A;color:#fff;border:1px solid #2A2A3E;border-radius:10px;padding:12px;font-size:14px;" />' +
       '<div id="sankofa-connect-env" style="font-size:12px;margin-top:6px;min-height:14px;"></div>' +
       '<label style="color:#fff;font-size:13px;font-weight:600;display:block;margin:18px 0 6px;">Server endpoint <span style="color:#6B7280;font-weight:400;">(advanced)</span></label>' +
-      '<input id="sankofa-connect-endpoint" type="url" autocomplete="off" spellcheck="false" placeholder="http://localhost:8080" value="' + escapeAttr(prefilledEndpoint) + '" style="width:100%;box-sizing:border-box;background:#16162A;color:#fff;border:1px solid #2A2A3E;border-radius:10px;padding:12px;font-size:14px;" />' +
+      '<input id="sankofa-connect-endpoint" type="url" autocomplete="off" spellcheck="false" placeholder="https://api.sankofa.dev" value="' + escapeAttr(prefilledEndpoint) + '" style="width:100%;box-sizing:border-box;background:#16162A;color:#fff;border:1px solid #2A2A3E;border-radius:10px;padding:12px;font-size:14px;" />' +
       '<div style="color:#6B7280;font-size:11px;margin-top:4px;">Leave the default for the hosted Sankofa cloud.</div>' +
       '<div id="sankofa-connect-error" style="color:#F87171;font-size:12px;margin-top:10px;min-height:16px;"></div>' +
       '<button id="sankofa-connect-submit" style="width:100%;background:#6C5CE7;color:#fff;border:0;border-radius:14px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;margin-top:12px;">Connect &amp; initialize SDK</button>' +

@@ -1,6 +1,6 @@
 # Sankofa HTML example (vanilla JS, no bundler)
 
-A static-site example that drives the full Sankofa Web SDK suite — Analytics, Catch (Crashlytics + Sentry merged), Switch, Config, Pulse, Replay — from plain `<script>` tags. **No bundler, no React, no build step** other than vendoring the IIFE builds of each `@sankofa/*` package.
+A static-site example that drives the full Sankofa Web SDK suite — Analytics, Catch (Crashlytics + Sentry merged), Switch, Config, Pulse, Replay — from plain `<script>` tags loaded straight from the jsDelivr CDN. **No bundler, no React, no build step, no vendored files** — every `@sankofa/*` module is pulled from `cdn.jsdelivr.net`, pinned to `@0.2.0`.
 
 Use this when you want to:
 
@@ -25,8 +25,18 @@ sankofa_example_html/
     crashes.js      crash gallery scenarios incl. Phase A/B demos
     interactions.js form submits + identify
     pulse-lab.js    Pulse survey runtime preview
-    vendor/         IIFE bundles for each @sankofa/* package
 ```
+
+Every `@sankofa/*` module loads from the CDN in each page's `<head>`, e.g.:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@sankofa/browser@0.2.0/dist/sankofa.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@sankofa/switch@0.2.0/dist/sankofa-switch.min.js"></script>
+```
+
+`@sankofa/browser` must load first — the other modules attach to the
+`Sankofa` global it defines (`SankofaSwitch`, `SankofaConfig`, `SankofaCatch`,
+`SankofaPulse`, `SankofaReplay`).
 
 ---
 
@@ -88,38 +98,36 @@ Demonstrates `SankofaPulse.show(surveyId)` + the in-app survey runtime.
 
 ---
 
-## Vendored bundles
+## Pinning a different SDK version
 
-Each `@sankofa/*` package ships an IIFE build for use without a bundler. The bundles in `js/vendor/` are pre-built and checked in. If you've edited any package's TypeScript source, rebuild the bundle and copy it over:
+Every page pins `@0.2.0` in its CDN URLs. To move the demo to a newer
+release, bump the version in each `<script src>` tag (jsDelivr also accepts a
+range like `@0.2` or `@latest`, but an exact pin is reproducible).
 
-```bash
-# From sdks/sankofa_sdk_web/
-cd packages/browser && npm run bundle && \
-  cp dist/sankofa.min.js ../../../example/sankofa_example_html/js/vendor/
-
-cd ../catch && npm run bundle && \
-  cp dist/sankofa-catch.min.js ../../../example/sankofa_example_html/js/vendor/
-
-# Repeat for switch / config / pulse / replay-rrweb as needed.
-```
-
-The `Sankofa.captureException`, `Sankofa.log`, `Sankofa.withScope`, etc. statics (Phase A/B) live on the **browser** IIFE — so if those aren't working in the gallery, rebuild `@sankofa/browser` first.
+The IIFE bundles served from the CDN are produced by each package's
+`npm run bundle` (esbuild) step, which now runs automatically on
+`prepublishOnly` so the published tarball always ships a fresh
+`dist/*.min.js`. To preview an unreleased local build without publishing,
+run `npm run bundle` in the package and point a `<script>` tag at the local
+`dist/` file.
 
 ---
 
 ## Troubleshooting
 
-### `Uncaught TypeError: Cannot read properties of undefined (reading 'rrwebReplayPlugin')`
+### `[Sankofa demo] SankofaReplay global missing` (or another module missing)
 
-The Replay plugin's CDN build failed to load. After the fix in `js/analytics.js`, this is logged as a warning (`[Sankofa demo] SankofaReplay global missing`) and the rest of the plugins — including Catch — still register. To use Replay, host `sankofa-replay.min.js` locally under `js/vendor/` and swap the `<script>` tag.
-
-### `[Sankofa demo] SankofaCatch global missing` in console
-
-Make sure `<script src="js/vendor/sankofa-catch.min.js"></script>` loads before `js/analytics.js` in the page. If you've edited `@sankofa/catch`, rebuild and copy as above.
+The CDN `<script>` for that module didn't load — usually a network failure
+or a version that predates the module being published. `js/analytics.js`
+builds its plugin list defensively, so a single missing module is logged as a
+warning and the rest of the SDK still initializes. Check the Network tab for
+the failing `cdn.jsdelivr.net` request and confirm the pinned version exists.
 
 ### `Sankofa.withScope is not a function`
 
-The vendored `js/vendor/sankofa.min.js` predates Phase B. Rebuild `@sankofa/browser` per the steps above.
+You've pinned a `@sankofa/browser` version that predates the Catch statics
+(Phase A/B). Bump the `@sankofa/browser@…` version in every page's
+`<script src>` to 0.2.0 or newer.
 
 ---
 
